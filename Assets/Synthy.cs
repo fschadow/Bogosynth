@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Synthy : MonoBehaviour
@@ -18,7 +19,7 @@ public class Synthy : MonoBehaviour
     public bool sortet = false;
     public float wait_speed = 50.0f;
     private float waitet;
-
+    
 
     private  void OnAudioFilterRead(float[] data, int channels)
     {
@@ -40,6 +41,7 @@ public class Synthy : MonoBehaviour
     
         }
     }
+
     
     // Start is called before the first frame update
     void Start()
@@ -66,34 +68,8 @@ public class Synthy : MonoBehaviour
            // print("test");
             bool compare = true;
             bogosort();
-        for (int j = 0; j < 4; j++)
-        {
-
-        
-            for (int i = 0; i < a_Major_list.Count  ; i++)
-            {
-
-               // print(i);
-                if (frequ>a_Major_list[i] || !compare)
-                {
-                    compare = false;
-                }
-                waitet = wait_speed;
-                while (wait_speed>=0.0)
-                {
-                    wait_speed = wait_speed - Time.deltaTime;
-                    frequ = a_Major_list[i];
-                    print(Time.deltaTime);
-                }
-                wait_speed = waitet;
-                
-                
-            }
-            if (compare)
-            {
-               // sortet = true;
-            }
-        }
+            toene(compare);
+       
     }
 
     void bogosort()
@@ -119,6 +95,41 @@ public class Synthy : MonoBehaviour
         old_list.Clear();
 
         // insert.
+    }
+
+    public async Task  toene(bool compare)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+
+
+            for (int i = 0; i < a_Major_list.Count; i++)
+            {
+
+                // print(i);
+                if (frequ > a_Major_list[i] || !compare)
+                {
+                    compare = false;
+                }
+                waitet = wait_speed;
+                 while (wait_speed >= 0.0)
+                {
+                    wait_speed = wait_speed - Time.deltaTime;
+                     frequ = a_Major_list[i];
+                    print(Time.deltaTime);
+                    await Task.Yield();
+
+                }
+                wait_speed = waitet;
+
+                await Task.Yield();
+            }
+            if (compare)
+            {
+                // sortet = true;
+            }
+        }
+        
     }
     
 }
